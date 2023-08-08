@@ -1,7 +1,6 @@
-import { galleryItems } from './gallery-items.js';
-// Change code below this line
+import { galleryItems } from "./gallery-items.js";
 
-const gallery = document.querySelector(".gallery")
+const gallery = document.querySelector(".gallery");
 
 const cardsMarkup = createGalleryCardMarkup(galleryItems)
 gallery.insertAdjacentHTML('beforeend', cardsMarkup)
@@ -25,23 +24,30 @@ function createGalleryCardMarkup(items) {
     }).join("");
 }
 
-function onGalleryElClick(e) {
-    e.preventDefault();
-    if (!e.target.classList.contains('gallery__image')) {
-        return;
-    }
-    const originalImg = e.target.dataset.source;
-    modalWindow(originalImg);
-}
+  const oringinalImgSrc = evt.target.dataset.source;
 
-function modalWindow(img) {
-    const instance = basicLightbox.create(`
-    <img src="${img}" width="800" height="600">
-`)
-    instance.show()
-    document.addEventListener('keydown', event => {
-        if (event.key === 'Escape') {
-            instance.close()
-        }
-    })
-}
+  const instance = basicLightbox.create(
+    `
+      <div class="modal">
+      <img src="${oringinalImgSrc}" width="1200">
+      </div>
+  `,
+    {
+      onShow: () => {
+        document.addEventListener("keydown", onEscapePress);
+      },
+    },
+    {
+      onClose: () => {
+        document.removeEventListener("keydown", onEscapePress);
+      },
+    }
+  );
+
+  instance.show();
+
+  function onEscapePress(evt) {
+    if (evt.code === "Escape") {
+      instance.close();
+    }
+  }

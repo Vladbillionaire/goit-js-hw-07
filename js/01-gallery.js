@@ -1,31 +1,33 @@
 import { galleryItems } from "./gallery-items.js";
+// Change code below this line
 
-const gallery = document.querySelector(".gallery");
+const galleryContainer = document.querySelector(".gallery");
 
-const cardsMarkup = createGalleryCardMarkup(galleryItems)
-gallery.insertAdjacentHTML('beforeend', cardsMarkup)
-gallery.addEventListener('click', onGalleryElClick)
-
-function createGalleryCardMarkup(items) {
-    return items.map(({ preview, original, description }) => {
-        
-        return `
-    <div class="gallery__item">
+function creatGalleryEl(arr) {
+  return arr
+    .map(
+      ({ preview, original, description }) =>
+        `
+        <li class="gallery__item">
         <a class="gallery__link" href="${original}">
-            <img
-                class="gallery__image"
-                src="${preview}"
-                data-source="${original}"
-                alt="${description}"
-            />
+          <img
+            class="gallery__image"
+            src="${preview}"
+            data-source="${original}"
+            alt="I${description}"
+          />
         </a>
-    </div>
-    `;
-    }).join("");
+      </li>
+        `
+    )
+    .join("");
 }
 
-  const oringinalImgSrc = evt.target.dataset.source;
-
+  galleryContainer.insertAdjacentHTML("beforeend", creatGalleryEl(galleryItems));
+  galleryContainer.addEventListener("click", onGalleryContainerClick);
+  function onGalleryContainerClick(e) {
+  e.preventDefault();
+  const oringinalImgSrc = e.target.dataset.source;
   const instance = basicLightbox.create(
     `
       <div class="modal">
@@ -46,8 +48,9 @@ function createGalleryCardMarkup(items) {
 
   instance.show();
 
-  function onEscapePress(evt) {
-    if (evt.code === "Escape") {
+  function onEscapePress(e) {
+    if (e.code === "Escape") {
       instance.close();
     }
   }
+}
